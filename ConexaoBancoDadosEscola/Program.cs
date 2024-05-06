@@ -1,14 +1,14 @@
 ﻿using Microsoft.Data.Sqlite;
 
-var connectionString = "Data Source=sqlite.db";
-var conexao = new SqliteConnection(connectionString);
+var connectionString = "Data Source=C:\\EstudoCSharp\\ConexaoDBEscola\\BD\\EscolaBancoDados.sdb";
+var conexao = new ConexaoBD(connectionString);
 var repositoryAluno = new AlunoRepository(conexao);
 
 
-repositoryAluno.InserirAluno(new Aluno { Nome = "Jessica", Turma = "2B", DataNascimento= "02/05/1995", Matricula="5550" });
+repositoryAluno.InserirAluno(new Aluno { Nome = "Edson", Turma = "3B", DataNascimento= "14/01/2000", Matricula="15084874" });
 
 
-var alunos = repositoryAluno.ObterTodasAlunos();
+var alunos = repositoryAluno.ObterTodosAlunos();
 foreach (var aluno in alunos)
 {
     Console.WriteLine($"Matricula: {aluno.Matricula}, Nome: {aluno.Nome}, Turma: {aluno.Turma}, Data de Nascimento: {aluno.DataNascimento}");
