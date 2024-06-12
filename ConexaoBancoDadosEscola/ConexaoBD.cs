@@ -1,25 +1,23 @@
-﻿using Microsoft.Data.Sqlite;
-public class ConexaoBD
+﻿using Microsoft.EntityFrameworkCore;
+public class ConexaoBD : DbContext
 {
-    private SqliteConnection _connectionString;
+    public DbSet<Aluno> Aluno { get; set; }
+    public DbSet<Professor> Professor { get; set; }
+    public DbSet<Disciplina> Disciplina { get; set; }
 
-    public ConexaoBD(string connectionString)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        _connectionString = new SqliteConnection(connectionString);
+        optionsBuilder.UseSqlite("Data Source=C:\\EstudoCSharp\\ConexaoDBEscola\\BD\\EscolaBancoDados.sdb");
     }
 
-    public void AbrirConexao()
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        _connectionString.Open();
+        modelBuilder.Entity<Aluno>().HasKey(a => a.Matricula);
+        modelBuilder.Entity<Disciplina>().HasKey(d => d.IdDisciplina);
+        modelBuilder.Entity<Professor>()
+        .HasMany(p => p.Disciplinas)
+        .WithOne(d => d.Professor)
+        .HasForeignKey(d => d.ProfessorId);
     }
 
-    public void FecharConexao()
-    {
-        _connectionString.Close();
-    }
-
-    public SqliteCommand ExecucaoComandos()
-    {
-        return _connectionString.CreateCommand();
-    }
 }
